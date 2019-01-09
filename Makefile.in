@@ -1,0 +1,168 @@
+# general stuff
+#
+SHELL   = @SHELL@
+CC      = @CC@
+CFLAGS  = @CFLAGS@                    \
+          -DPROF_HMM_TRANS=PLAN9      \
+          -DPAIR_HMM_STATES=SPACE5    \
+          -DPAIR_HMM_TRANS=ALL_TRANS
+LIBS    = @LIBS@
+
+
+# assorted variables
+#
+AUTO_DP    = auto_DP_which_comps.c auto_DP_comps.c auto_DP_inner_loop.c
+INNER_WRAP = DP_inner_wrapper_1.c DP_inner_wrapper_2.c
+
+OBJ_SRCH   = DP_search_LINSPACE_VITERBI.o    DP_search_LOGSPACE_VITERBI.o    \
+	     DP_search_LINSPACE_VIT_BACK.o   DP_search_LOGSPACE_VIT_BACK.o   \
+             DP_search_LINSPACE_FORWARD.o    DP_search_LOGSPACE_FORWARD.o    \
+             DP_search_LINSPACE_BACKWARD.o   DP_search_LOGSPACE_BACKWARD.o   \
+             DP_search_LINSPACE_OPT_ACCUR.o  DP_search_LOGSPACE_OPT_ACCUR.o 
+
+OBJ_TR     = DP_traceback_VITERBI.o DP_traceback_OPT_ACCUR.o
+
+
+# targets
+#
+all: \
+	prcX convert_to_prc
+
+clean:  	
+	rm -f *.o prc convert_to_prc
+
+prcX: \
+	HMM.o context.o seqio.o ssw.o DP_common.o match.o region.o upgma.o stats.o prc.o $(OBJ_SRCH) $(OBJ_TR)
+	$(CC) $(LIBS) HMM.o ssw.o context.o seqio.o DP_common.o match.o region.o stats.o upgma.o prc.o \
+	$(OBJ_SRCH) $(OBJ_TR) -o prcX
+
+convert_to_prc: \
+	HMM.o context.o seqio.o convert_to_prc.o
+	$(CC) $(LIBS) HMM.o context.o seqio.o convert_to_prc.o -o convert_to_prc
+
+context.o: \
+	context.c prc.h
+	$(CC) $(CFLAGS) -c context.c 
+
+ssw.o: \
+	ssw.c ssw.h
+	$(CC) $(CFLAGS) -c ssw.c
+
+seqio.o: \
+	seqio.c seqio.h
+	$(CC) $(CFLAGS) -c seqio.c
+
+HMM.o: \
+	HMM.c seqio.c context.c prc.h seqio.h
+	$(CC) $(CFLAGS) -c HMM.c
+
+upgma.o: \
+	upgma.c upgma.h
+	$(CC) $(CFLAGS) -c upgma.c
+
+DP_common.o: \
+	DP_common.c prc.h
+	$(CC) $(CFLAGS) -c DP_common.c
+
+match.o: \
+	match.c prc.h
+	$(CC) $(CFLAGS) -c match.c
+
+region.o: \
+	region.c prc.h
+	$(CC) $(CFLAGS) -c region.c
+
+stats.o: \
+	stats.c
+	$(CC) $(CFLAGS) -c stats.c
+
+prc.o: \
+	prc.c common.c prc.h
+	$(CC) $(CFLAGS) -c prc.c
+
+convert_to_prc.o: \
+	convert_to_prc.c common.c prc.h
+	$(CC) $(CFLAGS) -c convert_to_prc.c
+
+auto_DP_which_comps.c: \
+	write_auto_files.pl
+	./write_auto_files.pl
+
+auto_DP_comps.c: \
+	write_auto_files.pl
+	./write_auto_files.pl
+
+auto_DP_inner_loop.c: \
+	write_auto_files.pl
+	./write_auto_files.pl
+
+DP_search_LINSPACE_VITERBI.o: \
+	prc.h DP_search.c $(INNER_WRAP) $(AUTO_DP) 
+	$(CC) $(CFLAGS) \
+	-DALGO_SPACE=LINSPACE -DALGORITHM=VITERBI \
+	-o DP_search_LINSPACE_VITERBI.o -c DP_search.c
+
+DP_search_LOGSPACE_VITERBI.o: \
+	prc.h DP_search.c $(INNER_WRAP) $(AUTO_DP) 
+	$(CC) $(CFLAGS) \
+	-DALGO_SPACE=LOGSPACE -DALGORITHM=VITERBI \
+	-o DP_search_LOGSPACE_VITERBI.o -c DP_search.c
+
+DP_search_LINSPACE_VIT_BACK.o: \
+	prc.h DP_search.c $(INNER_WRAP) $(AUTO_DP) 
+	$(CC) $(CFLAGS) \
+	-DALGO_SPACE=LINSPACE -DALGORITHM=VIT_BACK \
+	-o DP_search_LINSPACE_VIT_BACK.o -c DP_search.c
+
+DP_search_LOGSPACE_VIT_BACK.o: \
+	prc.h DP_search.c $(INNER_WRAP) $(AUTO_DP) 
+	$(CC) $(CFLAGS) \
+	-DALGO_SPACE=LOGSPACE -DALGORITHM=VIT_BACK \
+	-o DP_search_LOGSPACE_VIT_BACK.o -c DP_search.c
+
+DP_search_LINSPACE_FORWARD.o: \
+	prc.h DP_search.c $(INNER_WRAP) $(AUTO_DP) 
+	$(CC) $(CFLAGS) \
+	-DALGO_SPACE=LINSPACE -DALGORITHM=FORWARD \
+	-o DP_search_LINSPACE_FORWARD.o -c DP_search.c
+
+DP_search_LOGSPACE_FORWARD.o: \
+	prc.h DP_search.c $(INNER_WRAP) $(AUTO_DP) 
+	$(CC) $(CFLAGS) \
+	-DALGO_SPACE=LOGSPACE -DALGORITHM=FORWARD \
+	-o DP_search_LOGSPACE_FORWARD.o -c DP_search.c
+
+DP_search_LINSPACE_BACKWARD.o: \
+	prc.h DP_search.c $(INNER_WRAP) $(AUTO_DP) 
+	$(CC) $(CFLAGS) \
+	-DALGO_SPACE=LINSPACE -DALGORITHM=BACKWARD \
+	-o DP_search_LINSPACE_BACKWARD.o -c DP_search.c
+
+DP_search_LOGSPACE_BACKWARD.o: \
+	prc.h DP_search.c $(INNER_WRAP) $(AUTO_DP) 
+	$(CC) $(CFLAGS) \
+	-DALGO_SPACE=LOGSPACE -DALGORITHM=BACKWARD \
+	-o DP_search_LOGSPACE_BACKWARD.o -c DP_search.c
+
+DP_search_LINSPACE_OPT_ACCUR.o: \
+	prc.h DP_search.c $(INNER_WRAP) $(AUTO_DP) 
+	$(CC) $(CFLAGS) \
+	-DALGO_SPACE=LINSPACE -DALGORITHM=OPT_ACCUR \
+	-o DP_search_LINSPACE_OPT_ACCUR.o -c DP_search.c
+
+DP_search_LOGSPACE_OPT_ACCUR.o: \
+	prc.h DP_search.c $(INNER_WRAP) $(AUTO_DP) 
+	$(CC) $(CFLAGS) \
+	-DALGO_SPACE=LOGSPACE -DALGORITHM=OPT_ACCUR \
+	-o DP_search_LOGSPACE_OPT_ACCUR.o -c DP_search.c
+
+DP_traceback_VITERBI.o: \
+	prc.h DP_traceback.c
+	$(CC) $(CFLAGS) -DALGORITHM=VITERBI \
+	-o DP_traceback_VITERBI.o -c DP_traceback.c
+
+DP_traceback_OPT_ACCUR.o: \
+	prc.h DP_traceback.c
+	$(CC) $(CFLAGS)	-DALGORITHM=OPT_ACCUR \
+	-o DP_traceback_OPT_ACCUR.o -c DP_traceback.c
+
