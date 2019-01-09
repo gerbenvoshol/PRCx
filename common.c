@@ -1,7 +1,7 @@
 /*
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-		   PRCx, the profile comparer eXtended, version 1.0.0
+	 PRCx, the profile comparer eXtended, version 1.0.0
 
 	 common_main.c: routines common to prc.c and convert_to_prc.c
 

@@ -1,13 +1,13 @@
 
-             ----------------------------
-             A ROUGH GUIDE TO PRC OPTIONS
-             ----------------------------
+             -----------------------------
+             A ROUGH GUIDE TO PRCx OPTIONS
+             -----------------------------
 
 
 Library versus pairwise runs versus tree mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The main PRC binary has three modes, "pairwise", "library" and "tree". In 
-the pairwise mode, PRC scores a model against another model and simply prints 
+The main PRCx binary has three modes, "pairwise", "library" and "tree". In 
+the pairwise mode, PRCx scores a model against another model and simply prints 
 out the results. In the library mode, it runs a model against a library of 
 models and saves the output to output.scores (and, if requested, the 
 alignments to output.aligns). E-values are only reported for local-local 
@@ -16,7 +16,7 @@ recognition). In the tree mode, it runs all the models in the library against
 all other in the library and saves the output to output.dist (a phylip compatible
 distance matrix) and the tree in newick format generated using UPGMA.
 
-PRC assumes that each model file contains exactly one model, and that the 
+PRCx assumes that each model file contains exactly one model, and that the 
 library file lists model files (using absolute paths), one filename per 
 line.
 
@@ -37,9 +37,9 @@ benefit is worthwhile.
 
 -MMfn  <> : match-match scoring function; dot1, dot2 (default)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Dot1 was the function used by PRC up to 1.5.0. Dot2, suggested by Johannes 
+Dot1 was the function used by PRCx up to 1.5.0. Dot2, suggested by Johannes 
 Soeding, appears to perform marginally better and has become the default 
-starting with PRC 1.5.1.
+starting with PRCx 1.5.1.
 
 
 -mode  <> : local-local (default), local-global, etc.
@@ -54,7 +54,7 @@ to HMM2".
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 By default, no alignments are printed out or saved (corresponding to the 
 option 'none'). For the remaining three options, the correspondence 
-between what's printed out and internal PRC states is as follows:
+between what's printed out and internal PRCx states is as follows:
 
                MM       MI       IM     DM,DI    MD,ID      DD      II
             -------  -------  -------  -------  -------  ------- -------
@@ -82,10 +82,10 @@ Currently, only local-local runs against a library have E-values.
 -stop  <> : stop looking for more hits when simple < stop
 -hits  <> : stop looking for more hits when hit_no > hits
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-PRC uses a variation of the Waterman-Eggert procedure to try and find all 
+PRCx uses a variation of the Waterman-Eggert procedure to try and find all 
 plausible alignments between a pair of models. However, sometimes there 
 are hundreds of such alignments, so the question is: when do you stop 
-looking for more? The PRC answer is: whenever an alignment is found with a 
+looking for more? The PRCx answer is: whenever an alignment is found with a 
 simple score less than the stop parameter, or whenever the number of hits 
 is exceeded. If E-values are calculated for the run, the search will also 
 be terminated when an alignment gets an E-value > 10*Emax.
@@ -107,7 +107,7 @@ Use fast prefiltering to reduce the amount of time consuming HMM-HMM alignments.
 This will effectively reduce any library to at most 1010 sequences. For this to 
 work fast, a discrete alphabet is generated from the probability distributions
 located in the HMM. Generating these discrete states is also time consuming, so
-this option is only useful when the library consists of PRC models (.prc) generated
+this option is only useful when the library consists of PRCx models (.prc) generated
 with the latest version (since these contain the discrete alphabet already).
 
 
@@ -121,7 +121,7 @@ taken from the filename. If the filename is
 
 the model name will be "XYZ.1". For HMMER models, the name is taken from the
 ACC line, or the NAME line if there is no ACC, or the filename if there is no
-ACC or NAME. For FASTA files, it is taken from the > line. Finally, PRC models
+ACC or NAME. For FASTA files, it is taken from the > line. Finally, PRCx models
 store the name inside the file. For models created using convert_to_prc the
 name can be specified during creation using the "-name" option.
 

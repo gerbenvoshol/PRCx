@@ -1,7 +1,7 @@
 /*
    - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-                   PRCx, the profile comparer eXtended, version 1.0.0
+         PRCx, the profile comparer eXtended, version 1.0.0
 
 		  prc.c: "wrapper" file for the actual binary
 

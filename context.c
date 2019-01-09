@@ -1,3 +1,22 @@
+/*
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+		   PRCx, the profile comparer eXtended, version 1.0.0
+
+	context.c: context library functions
+
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+   Copyright (C) 2003-5 Martin Madera and MRC LMB, Cambridge, UK
+   Copyright (C) 2018-19 Gerben Voshol, Leiden University, The Netherlands
+   All Rights Reserved
+
+   This source code is distributed under the terms of the GNU General Public
+   License. See the files COPYING and LICENSE for details.
+
+   - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+*/
+
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
