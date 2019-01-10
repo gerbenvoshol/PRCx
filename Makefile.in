@@ -29,7 +29,7 @@ all: \
 	prcX convert_to_prc
 
 clean:  	
-	rm -f *.o prc convert_to_prc
+	rm -f *.o prcX convert_to_prc
 
 prcX: \
 	HMM.o context.o seqio.o ssw.o DP_common.o match.o region.o upgma.o stats.o prc.o $(OBJ_SRCH) $(OBJ_TR)
