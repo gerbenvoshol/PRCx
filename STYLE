@@ -1,1 +1,1 @@
-style --style=1tbs --break-one-line-headers --add-braces --pad-oper --pad-comma --pad-header --unpad-paren --indent=tab *.h
+astyle --style=1tbs --break-one-line-headers --add-braces --pad-oper --pad-comma --pad-header --unpad-paren --indent=tab *.h
