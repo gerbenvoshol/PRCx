@@ -236,9 +236,10 @@ char **prc_stringfile2(char *filename, size_t *number_of_lines)
 double prc_sum(double *data, int n)
 {
 	double c = 0.0; /* A running compensation for lost low-order bits. */
+	int i;
 
 	double sum = data[0];
-	for (int i = 1; i < n; i++) {
+	for (i = 1; i < n; i++) {
 		double t = sum + data[i];
 		if (fabs(sum) >= fabs(data[i])) {
 			/* If sum is bigger, low-order digits of input[i] are lost. */
@@ -511,13 +512,14 @@ int calc_posterior_probabilities_profile(double **profile, int profile_length, i
 	double sum;
 	double max = -DBL_MAX;        // Needed to find the maximum number for the log-sum-exp trick
 	double posterior_probability; // The posterior probability around a single sequence position
+	int i;
 
 	/* Needed to calculate the posterior probabilites arouns a single sequence position */
 	int begin = MAX(0, (index - cs4000->center));
 	int end = MIN(profile_length, index + cs4000->center + 1);
 
 	/* Calculate the posterior probabilities */
-	for (int i = 0; i < cs4000->size; i++) {
+	for (i = 0; i < cs4000->size; i++) {
 		/* Calculate the posterior probability that the context profile emitted/produced the
 		 * observed sequence. The center has more weight than the edges. So it is a simple
 		 * calculation of multiplying the probability of the amino acid in a window around index 
@@ -544,12 +546,12 @@ int calc_posterior_probabilities_profile(double **profile, int profile_length, i
 
 	// Log-Sum-Exp trick begins here
 	sum = 0.0;
-	for (int i = 0; i < cs4000->size; i++) {
+	for (i = 0; i < cs4000->size; i++) {
 		sum += exp(posterior_probabilities[i] - max);
 	}
 
 	double tmp = max + log(sum);
-	for (int i = 0; i < cs4000->size; i++) {
+	for (i = 0; i < cs4000->size; i++) {
 		/* We store the raw probability! */
 		posterior_probabilities[i] = exp(posterior_probabilities[i] - tmp);
 	}
@@ -566,13 +568,13 @@ int calc_posterior_probabilities_sequence(char *sequence, int index, CONTEXT_LIB
 {
 	double max = -DBL_MAX;        // Needed to find the maximum number for the log-sum-exp trick
 	double posterior_probability; // The posterior probability around a single sequence position
-
+	int i;
 	/* Needed to calculate the posterior probabilites arouns a single sequence position */
 	int begin = MAX(0, (index - cs4000->center));
 	int end = MIN(strlen(sequence), index + cs4000->center + 1);
 
 	/* Calculate the posterior probabilities */
-	for (int i = 0; i < cs4000->size; i++) {
+	for (i = 0; i < cs4000->size; i++) {
 		/* Calculate the posterior probability that the context profile emitted/produced the
 		 * observed sequence. The center has more weight than the edges. So it is a simple
 		 * calculation of multiplying the probability of the amino acid in a window around index 
@@ -594,12 +596,12 @@ int calc_posterior_probabilities_sequence(char *sequence, int index, CONTEXT_LIB
 
 	// Log-Sum-Exp trick begins here
 	double sum = 0.0;
-	for (int i = 0; i < cs4000->size; i++) {
+	for (i = 0; i < cs4000->size; i++) {
 		sum += exp(posterior_probabilities[i] - max);
 	}
 
 	double tmp = max + log(sum);
-	for (int i = 0; i < cs4000->size; i++) {
+	for (i = 0; i < cs4000->size; i++) {
 		/* We store the raw probability! */
 		posterior_probabilities[i] = exp(posterior_probabilities[i] - tmp);
 	}
