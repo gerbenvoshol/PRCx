@@ -199,7 +199,7 @@ char **prc_stringfile(char *filename, size_t *number_of_lines)
     }
 
     /* Allocate space to keep the entire file */
-    sfile = (char **) malloc(sizeof(char *) * (count + 1) + fsize + 1);
+    sfile = (char **) calloc(sizeof(char *) * (count + 1) + fsize + 1, 1);
     if (!sfile) {
         fprintf(stderr, "Could not copy the data\n");
         return NULL;

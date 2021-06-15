@@ -29,16 +29,16 @@ all: \
 	prcX convert_to_prc
 
 clean:  	
-	rm -f *.o prc convert_to_prc
+	rm -f *.o prcX convert_to_prc
 
 prcX: \
 	HMM.o context.o seqio.o ssw.o DP_common.o match.o region.o upgma.o stats.o prc.o $(OBJ_SRCH) $(OBJ_TR)
-	$(CC) $(LIBS) HMM.o ssw.o context.o seqio.o DP_common.o match.o region.o stats.o upgma.o prc.o \
-	$(OBJ_SRCH) $(OBJ_TR) -o prcX
+	$(CC) HMM.o ssw.o context.o seqio.o DP_common.o match.o region.o stats.o upgma.o prc.o \
+	$(OBJ_SRCH) $(OBJ_TR) -o prcX $(LIBS)
 
 convert_to_prc: \
 	HMM.o context.o seqio.o convert_to_prc.o
-	$(CC) $(LIBS) HMM.o context.o seqio.o convert_to_prc.o -o convert_to_prc
+	$(CC) HMM.o context.o seqio.o convert_to_prc.o -o convert_to_prc $(LIBS)
 
 context.o: \
 	context.c prc.h

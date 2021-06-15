@@ -147,8 +147,6 @@ static char *get_today();
  * files, and replacement functions for system calls that don't exist on
  * one or more machines.
  */
-extern const char *const sys_errlist[];
-
 #if defined(__sun) && !defined(FILENAME_MAX)
 #include <sys/param.h>
 #define FILENAME_MAX MAXPATHLEN
@@ -1380,7 +1378,7 @@ int seqfread(SEQFILE *sfp, int flag)
 			offset = isfp->byteoffsets[isfp->currentoffset++];
 			status = seek_raw_file(isfp->input_fd, offset);
 			error_test(status != STATUS_OK, E_READFAILED, return -1,
-			           print_error("%s:  %s\n", isfp->filename, sys_errlist[errno]));
+			           print_error("%s:  %s\n", isfp->filename, strerror(errno)));
 
 			isfp->fp_bytepos = offset;
 			isfp->fp_current = isfp->fp_top = isfp->fp_buffer;
@@ -4153,7 +4151,7 @@ static int intseqf_open(INTSEQFILE *isfp, char *filename, char *format)
 		status = open_raw_file(get_truename(isfp->filename, NULL),
 		                       &isfp->input_fd);
 		error_test(status != STATUS_OK, E_OPENFAILED, return STATUS_ERROR,
-		           print_error("%s:  %s\n", filename, sys_errlist[errno]));
+		           print_error("%s:  %s\n", filename, strerror(errno)));
 		isfp->openflag = 1;
 
 #ifdef ISMAPABLE
@@ -4251,7 +4249,7 @@ static int intseqf_open(INTSEQFILE *isfp, char *filename, char *format)
 		offset = isfp->byteoffsets[isfp->currentoffset++];
 		status = seek_raw_file(isfp->input_fd, offset);
 		error_test(status != STATUS_OK, E_READFAILED, return -1,
-		           print_error("%s:  %s\n", isfp->filename, sys_errlist[errno]));
+		           print_error("%s:  %s\n", isfp->filename, strerror(errno)));
 
 		isfp->fp_bytepos = offset;
 		isfp->entry_count = 0;
@@ -4337,7 +4335,7 @@ static int intseqf_open_for_writing(INTSEQFILE *isfp, char *filename,
 	} else {
 		isfp->output_fp = fopen(get_truename(filename, NULL), mode);
 		error_test(isfp->output_fp == NULL, E_OPENFAILED, return STATUS_ERROR,
-		           print_error("%s:  %s\n", filename, sys_errlist[errno]));
+		           print_error("%s:  %s\n", filename, strerror(errno)));
 		isfp->openflag = 1;
 	}
 
@@ -11048,13 +11046,13 @@ static int fp_read_more(INTSEQFILE *isfp, char **line_out, char **s_out,
 			status = seek_raw_file(isfp->input_fd, newfilepos + offset);
 			error_test(status != STATUS_OK, E_READFAILED, return STATUS_ERROR,
 			           print_error("%s:  %s\n", isfp->filename,
-			                       sys_errlist[errno]));
+			                       strerror(errno)));
 
 			size = read_raw_file(isfp->input_fd, isfp->fp_buffer,
 			                     isfp->fp_bufsize - 1);
 			error_test(size <= top - bottom, E_READFAILED, return STATUS_ERROR,
 			           print_error("%s:  %s\n", isfp->filename,
-			                       sys_errlist[errno]));
+			                       strerror(errno)));
 
 			isfp->fp_bytepos = newfilepos + offset;
 
@@ -11169,7 +11167,7 @@ static int fp_read_more(INTSEQFILE *isfp, char **line_out, char **s_out,
 		return STATUS_EOF;
 	} else {
 		raise_error(E_READFAILED, return STATUS_ERROR,
-		            print_error("%s:  %s\n", isfp->filename, sys_errlist[errno]));
+		            print_error("%s:  %s\n", isfp->filename, strerror(errno)));
 	}
 }
 
