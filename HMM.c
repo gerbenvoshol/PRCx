@@ -1021,7 +1021,7 @@ HMM* read_HMM_SAM3x_binary(char* filename)
 	HMMinfo *info;
 	char    line[200] = "";
 	double   data[49], itable[20], ftable[20];
-	int     i, dummy, iindex, findex, m = 0;
+	int     i, dummy, iindex = 0, findex = 0, m = 0;
 
 	open_file_or_die(file, filename, "r");
 
